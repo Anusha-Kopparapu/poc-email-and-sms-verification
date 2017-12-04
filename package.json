@@ -1,0 +1,24 @@
+{
+  "name": "poc-email-and-sms-verification",
+  "version": "1.0.0",
+  "description": "POC for sending email and SMS for verification",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "sendgrid": "^5.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Anusha-Kopparapu/poc-email-and-sms-verification.git"
+  },
+  "author": "Anusha K",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Anusha-Kopparapu/poc-email-and-sms-verification/issues"
+  },
+  "homepage": "https://github.com/Anusha-Kopparapu/poc-email-and-sms-verification#readme"
+}

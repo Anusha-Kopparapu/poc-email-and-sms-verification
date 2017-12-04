@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Email & SMS</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
 </head>
 <body ng-app="myApp" ng-controller="myCtrl">
 <p>First Name:<input type="text" ng-model="fname"> {{fname}}</p> 
@@ -9,7 +10,12 @@
 <p>Email:<input type="text" ng-model="email"></p>
 <p>Mobile:<input type="text" ng-model="mobile"></p>
 <p><input type="submit" ng-click="register()"></p>
-</body>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-<script src="app.js"></script>
+
+			<script src="bower_components/angular/angular.min.js"></script>
+          <script src="bower_components/angular-route/angular-route.min.js"></script>
+          <script src="bower_components/jquery/dist/jquery.min.js"></script>
+          <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+ <!--     <script src="Angular-route-app.js"></script> -->
+     <script src="public/app.js"></script>
+     </body>
 </html>

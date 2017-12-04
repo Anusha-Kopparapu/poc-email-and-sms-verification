@@ -1,0 +1,18 @@
+{
+  "name": "poc-email-and-sms-verification",
+  "description": "POC for sending email and SMS for verification",
+  "main": "index.js",
+  "authors": [
+    "Anusha K"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Anusha-Kopparapu/poc-email-and-sms-verification",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
