@@ -1,0 +1,19 @@
+<div ng-controller="myCtrl">
+	<!-- <form method="post" action="/phone">
+    <div id="Checkemail" class="md-form-group md-label-floating"> <input class="md-form-control" type="text" name="email" maximum="10" ng-model="Mobilenumber"> <label class="md-control-label">Enter your MobileNumber</label> </div>  
+    <div class="toast-message">  
+        <p style="text-align:center;color:red;"></p> 
+    </div>  
+    <div class="md-form-group"> <button type="submit" ng-keyup="$event.keyCode == 13" class=" btn btn-primary btn-block">Send otp</button> </div>  
+    </form> -->
+
+
+     <form>
+    Name: <input type="text" ng-model="name"><br><br>
+    Email: <input type="text" ng-model="email"><br><br>
+    Phone Number: <input type="text" ng-model="phone"><br><br>
+    <button type="submit" class=" btn btn-primary btn-block" ng-click="register(name,email,phone)">Register</button>
+  </form>
+</div>
+
+<!-- method="post" action="/phone" -->

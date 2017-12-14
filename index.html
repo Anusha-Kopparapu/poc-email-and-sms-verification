@@ -4,13 +4,7 @@
 	<title></title>
 </head>
 <body ng-app='smsApp' ng-controller='myCtrl'>
-<form data-toggle="md-validator">  
-    <div id="Checkemail" class="md-form-group md-label-floating"> <input class="md-form-control" type="text" name="email" maximum="10" ng-model="Mobilenumber"> <label class="md-control-label">Enter your MobileNumber</label> </div>  
-    <div class="toast-message">  
-        <p style="text-align:center;color:red;"></p>  {{body}}
-    </div>  
-    <div class="md-form-group"> <button type="submit" method ='/phone' ng-keyup="$event.keyCode == 13" class=" btn btn-primary btn-block" ng-click="submit()">Submit</button> </div>  
-</form>  
+<div ng-view></div>
 
 		  <script src="bower_components/angular/angular.min.js"></script>
           <script src="bower_components/angular-route/angular-route.min.js"></script>

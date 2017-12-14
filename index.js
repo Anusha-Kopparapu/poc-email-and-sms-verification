@@ -4,7 +4,9 @@ var express = require('express');
   var router = express.Router();
    var crypto = require('crypto');
    var Sequelize=require ('sequelize');
-  // var sendgrid = require("sendgrid")("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");
+   var pg =require('pg');
+  var bodyParser = require("body-parser");
+ // var SMS =require('SMS');
   var sequelize = new Sequelize('postgres', 'postgres', '1994@Anu', {
     host: 'localhost',
     port: 5432,
@@ -27,6 +29,10 @@ sequelize
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
+   app.use(bodyParser.json());
+  app.use(express.static(__dirname + '/'));
+  app.use('/',router);
+
   router.get('/email',function(req,res){
 
 
@@ -65,32 +71,92 @@ sg.API(request, function(err, response) {
 });
 });
  });
-  router.get('/phone',function(req,res){
+  router.post('/phone',function(req,res){
+    console.log('Anu');
+    
 
-    crypto.randomBytes(3, function(err, buffer) {
+    crypto.randomBytes(2, function(err, buffer) {
    
      var token = parseInt(buffer.toString('hex'), 16).toString().substr(0,6);
-
-    var fromphone = '+14252766778';
+    console.log(token);
+//     const RapidAPI = require('rapidapi-connect');
+//     const rapid = new RapidAPI('SMS verification', 'xxPqI0E81RmshOlgA5HZCUgraGjLp1as4Kbjsn7MamogfCwrBt');
+//     rapid.call('Delivery', 'sendSMS', {
+//     message: 'Hello, connect!' + token,
+//     to : '7200980480'
+// })
+//     .on('success', (res) => {
+//         console.log('success');
+//     })
+//     .on('error', (err) => {
+//         console.log(err);
+//     });
+    var fromphone = '+14083407701';
     var tophone  ='+917200980480';
     var client = require('twilio')(
-  'ACf2c829068bc38ecdc6fc9eaffba9b27e',
-  'df89f2cd9bec439a4a91b5724b68928c'
+  'ACcb539b66c8b8a0df3c03deb4b6366c11',
+  'c0495e45003af0211f98d368eda3e1e0'
 );
+
+    // API Key site2SMS :xxPqI0E81RmshOlgA5HZCUgraGjLp1as4Kbjsn7MamogfCwrBt
     client.messages.create({
   from: fromphone,
   to: tophone,
-  body: "Hai !! This is Anusha"+ token
+  body: "Hai !! Your verification code is :"+ token
 },function(err,data){
   if(err)
     console.log(err);
-})
-  });
-  });
-  module.exports = router;
-  // set the public folder to serve public assets
-  app.use(express.static(__dirname + '/'));
-  app.use('/',router);
+    
+}) 
+    
+    sequelize.query("INSERT INTO persondetails (token) VALUES('" + token+ "') (SELECT * FROM persondetails ORDER BY name DESC LIMIT 1)",[token],{type: sequelize.QueryTypes.INSERT}).then(function(persondetails,err) {
+    });
   
+});
+
+    res.sendFile(path.join(__dirname+'/sms.html'));
+  });
+ 
+  router.post('/Post',function(req,res){
+ console.log('Hi');
+  console.log(req.body);
+    var name = req.body.name;
+    var email =req.body.email;
+    var phone =req.body.phone;
+    //  var name = 'anushak1';
+    // var email ='anusha.k5@tcs.com1';
+    // var phone ='7200904801';
+       // console.log(firstname);
+       // console.log(req.body);
+    var data = {
+        "Data":""
+    };
+   
+  if(!!name && !!email && !!phone) 
+    {
+//sequelize.query("INSERT INTO persondetails(firstName,lastname,pwd,confirmPwd) VALUES('" + firstName+ "','" + lastname+ "','" + pwd + "','" + confirmPwd+ "')",[firstName,lastname,pwd,confirmPwd],{type: sequelize.QueryTypes.INSERT}).then(function(persondetails,err) {
+  sequelize.query("INSERT INTO persondetails (name,email,phone) VALUES('" + name+ "','" + email+ "','" + phone + "')",[name,email,phone],{type: sequelize.QueryTypes.INSERT}).then(function(persondetails,err) {
+    
+ if(!!err){ 
+ // if(!!err){
+                data.Data = "Error Adding data";
+            }else{
+                //data["Data"] = 0;
+                data["Data"] = "Person details Added Successfully";
+            }
+            res.json(data);
+        });
+   }
+    else{
+        data["Data"] = "Please provide all required data of person";
+        //res.json(404).data);
+res.status(400).json(data);
+    }
+});
+
+  // set the public folder to serve public assets
+
+   module.exports = router;
+
  app.listen(8080);
  console.log('port is running on 8080');
