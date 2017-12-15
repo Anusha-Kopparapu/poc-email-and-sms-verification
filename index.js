@@ -33,22 +33,22 @@ sequelize
   app.use(express.static(__dirname + '/'));
   app.use('/',router);
 
-  router.get('/email',function(req,res){
-
+  router.post('/email',function(req,res){
+console.log('hi');
 
 crypto.randomBytes(3, function(err, buffer) {
    
      var token = parseInt(buffer.toString('hex'), 16).toString().substr(0,6);
 
   var helper = require('sendgrid').mail,
-sg = require('sendgrid')('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');
+sg = require('sendgrid')(SENDGRID_KEY);
 var emailtestfrom ='anushak.k21@gmail.com';
 var emailtestto ='anushak.k21@gmail.com';
 
 var from_email = new helper.Email(emailtestfrom);
 var to_email = new helper.Email(emailtestto);
 var subject = 'Subject';
-var content = new helper.Content('text/html', '<html><p>Please find the default password for this website</p>'+ token +'<p>Please change it after your login<p>'+'<a href="clickhere">clickhere</a></html>');
+var content = new helper.Content('text/html', '<html><p>Please find the default password for this website</p>'+ token +'<p>Please change it after your login<p>'+'<a href="http://localhost:8080/index.html">clickhere</a></html>');
 var mail = new helper.Mail(from_email, subject, to_email, content);
 
 var request = sg.emptyRequest({
@@ -58,18 +58,19 @@ var request = sg.emptyRequest({
 });
 
 sg.API(request, function(err, response) {
-    console.log(err, response);
     if (!err) {
-        res.send({
-            message: 'An email has been sent to the provided email with further instructions.'
-        });
+        
+        console.log('An email has been sent to the provided email with further instructions');
+
     } else {
-        return res.status(400).send({
-            message: 'Failure sending email'
-        });
+        
+        console.log('Failure sending email');
     }
 });
+
 });
+res.sendFile(path.join(__dirname+'/views/email.html'));
+ 
  });
   router.post('/phone',function(req,res){
     console.log('Anu');
@@ -94,8 +95,8 @@ sg.API(request, function(err, response) {
     var fromphone = '+14083407701';
     var tophone  ='+917200980480';
     var client = require('twilio')(
-  'ACcb539b66c8b8a0df3c03deb4b6366c11',
-  'c0495e45003af0211f98d368eda3e1e0'
+   'ACcb539b66c8b8a0df3c03deb4b6366c11',
+   'c0495e45003af0211f98d368eda3e1e0'
 );
 
     // API Key site2SMS :xxPqI0E81RmshOlgA5HZCUgraGjLp1as4Kbjsn7MamogfCwrBt
@@ -106,28 +107,26 @@ sg.API(request, function(err, response) {
 },function(err,data){
   if(err)
     console.log(err);
-    
+  else{
+
+    sequelize.query("UPDATE persondetails set token= ('" + token+ "') WHERE id =(SELECT id FROM persondetails ORDER BY id DESC LIMIT 1)",[token],{type: sequelize.QueryTypes.UPDATE}).then(function(persondetails,err) {
+    });
+
+  } 
 }) 
     
-    sequelize.query("INSERT INTO persondetails (token) VALUES('" + token+ "') (SELECT * FROM persondetails ORDER BY name DESC LIMIT 1)",[token],{type: sequelize.QueryTypes.INSERT}).then(function(persondetails,err) {
-    });
+    
   
 });
 
-    res.sendFile(path.join(__dirname+'/sms.html'));
+    res.sendFile(path.join(__dirname+'/views/sms.html'));
   });
  
   router.post('/Post',function(req,res){
- console.log('Hi');
-  console.log(req.body);
+ 
     var name = req.body.name;
     var email =req.body.email;
     var phone =req.body.phone;
-    //  var name = 'anushak1';
-    // var email ='anusha.k5@tcs.com1';
-    // var phone ='7200904801';
-       // console.log(firstname);
-       // console.log(req.body);
     var data = {
         "Data":""
     };
@@ -153,6 +152,22 @@ sg.API(request, function(err, response) {
 res.status(400).json(data);
     }
 });
+
+  router.post('/verify',function(req,res){
+    console.log('hi');
+    var otp = req.body.otp;
+    console.log(otp);
+    sequelize.query("SELECT token FROM persondetails ORDER BY id DESC LIMIT 1",{type: sequelize.QueryTypes.SELECT}).then(function(persondetails,err) {
+    console.log(persondetails[0].token);
+    if(otp == persondetails[0].token){
+      console.log('your token verified');
+    }else{
+      console.log('your token is not verified');
+    }
+    res.status(200).send({message:"your route is ended"});
+    });
+       
+  });
 
   // set the public folder to serve public assets
 

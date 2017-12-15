@@ -3,13 +3,16 @@ var app = angular.module('smsApp',['ngRoute']);
 app.config(function($routeProvider) {
     $routeProvider
     .when("/", {
-        templateUrl : "register.html"
+        templateUrl : "/views/register.html"
     })
     .when("/sms", {
-        templateUrl : "sms.html"
+        templateUrl : "/views/sms.html"
+    })
+     .when("/email", {
+        templateUrl : "/views/email.html"
     })
     .when("/verification", {
-        templateUrl : "verification.html"
+        templateUrl : "/views/verification.html"
     });
 });
 
@@ -45,11 +48,16 @@ $scope.register = function(name,email,phone)
 });
 app.controller('appCtrl',function($scope,$http){
 	$scope.verifyotp =function (){
- 	 var otp =$scope.otp;
+          var body = {
+        
+            otp :$scope.otp
+            
+    };
 
 $http({
-    method: 'GET',
-    url: 'http://localhost:8080/Post',
+    method: 'POST',
+    url: 'http://localhost:8080/verify',
+    data:body,
     headers:{'Content-Type': 'application/json'},
   }).then(function successCallback(response) {
         console.log("Entered in successCallback ");
@@ -57,11 +65,13 @@ $http({
         console.log(response.status);
         console.log(response.statusText);
         console.log(response.statusText);
+        alert('your otp is verified');
         }, function errorCallback(response) {
         console.log("Entered in errorCallback ");
         console.log(response.xhrStatus);
         console.log(response.status);
         console.log(response.statusText);
+        alert('your otp is not verified');
 }); 
 
 
